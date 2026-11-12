@@ -4,6 +4,10 @@
   "name": "kshitijvarshney-com",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-10",
+  // Serve only on kshitijvarshney.com, where the zone's challenge rules apply. The production
+  // workers.dev address would bypass them. Per-version preview URLs stay on for iterating.
+  "workers_dev": false,
+  "preview_urls": true,
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

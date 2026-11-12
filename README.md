@@ -20,7 +20,7 @@ Then open http://localhost:8788. Without the secrets, `/api/status` answers 503 
 
 ## Deploy
 
-Workers Builds deploys the `main` branch of the GitHub repo with `npx wrangler deploy`. The Worker in the dashboard is named `kshitijvarshney-com`, which must match `name` in `wrangler.jsonc`.
+Workers Builds deploys the `main` branch of the GitHub repo with `npx wrangler deploy`. The Worker in the dashboard is named `kshitijvarshney-com`, which must match `name` in `wrangler.jsonc`. It serves only on kshitijvarshney.com: the production workers.dev address is off (`workers_dev: false`) so the zone's challenge rules can't be bypassed, while per-version preview URLs stay on.
 
 The status endpoint needs two secrets on the Worker, under Settings > Variables and Secrets:
 
