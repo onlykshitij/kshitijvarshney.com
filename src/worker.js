@@ -31,7 +31,9 @@ async function status(request, env, ctx) {
   const cache = caches.default;
   const cacheKey = new Request(new URL("/api/status", request.url).toString());
   const cached = await cache.match(cacheKey);
-  if (cached) return cached;
+  // Rebuild the response: copies served from the cache come back with the zone's Browser
+  // Cache TTL (4 hours) in Cache-Control, which would keep a stale status in browsers.
+  if (cached) return json(await cached.json(), 200);
 
   if (!env.CF_ACCOUNT_ID || !env.CF_API_TOKEN) return json({ error: "not configured" }, 503);
 
@@ -55,17 +57,20 @@ async function status(request, env, ctx) {
     services[service] = s === undefined ? "unknown" : s === "healthy" || s === "degraded" ? "up" : "down";
   }
 
-  const response = json({ services, checked: new Date().toISOString() }, 200, CACHE_SECONDS);
-  ctx.waitUntil(cache.put(cacheKey, response.clone()));
-  return response;
+  const body = { services, checked: new Date().toISOString() };
+  // The edge copy lives CACHE_SECONDS; browsers always ask again (one small request per visit).
+  ctx.waitUntil(cache.put(cacheKey, new Response(JSON.stringify(body), {
+    headers: { "content-type": "application/json; charset=utf-8", "cache-control": `public, s-maxage=${CACHE_SECONDS}, max-age=${CACHE_SECONDS}` },
+  })));
+  return json(body, 200);
 }
 
-function json(body, status, maxAge = 0) {
+function json(body, status) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "cache-control": maxAge ? `public, max-age=${maxAge}` : "no-store",
+      "cache-control": "no-store",
       "x-content-type-options": "nosniff",
     },
   });
