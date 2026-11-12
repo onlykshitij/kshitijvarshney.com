@@ -11,9 +11,9 @@
 
 // Which tunnel (by its name in Cloudflare) each service sits behind.
 const SERVICE_TUNNELS = {
-  trackhost: "trackhost",
-  media: "homelab",
-  seerr: "homelab",
+  trackhost: "Trackhost_Tunnel",
+  media: "KV_ROG_CFTunnel",
+  seerr: "KV_ROG_CFTunnel",
 };
 
 const CACHE_SECONDS = 60;
