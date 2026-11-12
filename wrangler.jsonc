@@ -1,0 +1,14 @@
+// Cloudflare Workers config. Workers Builds runs `npx wrangler deploy` on every push to main.
+// The name must match the Worker's name in the dashboard.
+{
+  "name": "kshitijvarshney-com",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-10",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+}

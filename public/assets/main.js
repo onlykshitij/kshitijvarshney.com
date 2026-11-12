@@ -1,5 +1,5 @@
 // Footer year, link-preview mode, and the service status check.
-// /api/status (functions/api/status.js) reports whether each service's Cloudflare tunnel is up.
+// /api/status (src/worker.js) reports whether each service's Cloudflare tunnel is up.
 // A down service's card dims and reads "Down for maintenance"; when every service is down the
 // section shows one maintenance line instead. If the check fails, the cards stay as they are.
 // Add ?down to the URL to preview everything down, or ?down=trackhost,media for some of them.
